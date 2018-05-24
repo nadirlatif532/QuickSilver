@@ -186,7 +186,7 @@ function showRoomURL(roomid) {
                 (function reCheckRoomPresence() {
                     connection.checkPresence(roomid, function(isRoomExists) {
                         if(isRoomExists) {
-                            connection.join(roomid);
+                            connection.join(roomid,password);
                             return;
                         }
                         setTimeout(reCheckRoomPresence, 5000);
