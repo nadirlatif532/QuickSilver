@@ -1,44 +1,8 @@
 var valb = 1;
 
-document.getElementById('open-room').onclick = function() {
-  if (!document.getElementById('room-password').value.length && !document.getElementById(
-      'room-id').value.length) {
-    alert('Please enter the required details');
-    return;
-  }
-
-
-
-  connection.checkPresence(document.getElementById('room-id').value, function(isRoomExists,
-    roomid) {
-    if (isRoomExists) {
-      document.getElementById('open-room').disabled = true;
-      alert("The current room already exists would you like to 													join it?");
-
-      return;
-
-    } else {
-
-      document.getElementById('share-file').style.display = "inline";
-      document.getElementById('input-text-chat').style.display = "inline";
-      document.getElementById('chat-output').style.display = "inline";
-      document.getElementById('file-container').style.display = "inline";
-
-      connection.openOrJoin(document.getElementById('room-id').value, document.getElementById(
-        'room-password').value);
-      disableInputButtons();
-      showRoomURL(document.getElementById('room-id').value);
-    }
-  });
-
-
-};
-
-
-
 document.getElementById('join-room').onclick = function() {
-  if (!document.getElementById('room-password').value.length && !document.getElementById(
-      'room-id').value.length) {
+  if (document.getElementById('room-password').value.length == 0 ||  document.getElementById(
+      'room-id').value.length == 0) {
     alert('Please enter required details');
     return;
   }
@@ -104,7 +68,7 @@ connection.enableFileSharing = true;
 // comment-out below line if you do not have your own socket.io server
 connection.socketURL = 'https://rtcmulticonnection.herokuapp.com:443/';
 
-connection.socketMessageEvent = 'password-protected-rooms-demo';
+connection.socketMessageEvent = 'password-protected-rooms';
 
 connection.session = {
   audio: true,
@@ -122,9 +86,9 @@ connection.onJoinWithPassword = function(remoteUserId) {
   connection.openOrJoin(remoteUserId, password);
 };
 connection.onInvalidPassword = function(remoteUserId, oldPassword) {
-  var password = prompt(remoteUserId + ' is password protected. Your entered wrong password (' +
-    oldPassword + '). Please enter valid pasword:');
-  connection.openOrJoin(remoteUserId, password);
+  alert(remoteUserId + ' is password protected. Your entered wrong password, Please enter valid pasword:');
+  location.reload();
+  
 };
 connection.onPasswordMaxTriesOver = function(remoteUserId) {
   alert(remoteUserId + ' is password protected. Your max password tries exceeded the limit.');
@@ -169,10 +133,11 @@ connection.onstreamended = function(event) {
 };
 
 
-function disableInputButtons() {;
-  document.getElementById('open-room').disabled = true;
+function disableInputButtons() {
   document.getElementById('join-room').disabled = true;
   document.getElementById('room-id').disabled = true;
+  document.getElementById('room-password').disabled = true;
+  document.getElementById('join-room').style.display = "none";
 }
 
 
@@ -182,8 +147,7 @@ function disableInputButtons() {;
 // ......................................................
 
 function showRoomURL(roomid) {
-  var roomQueryStringURL = '?roomid=' + roomid + '&password=' + document.getElementById(
-    'room-password').value;
+  var roomQueryStringURL = '?roomid=' + roomid +'&password=' + document.getElementById('room-password').value;
   var html = 'Unique URL for your room:';
   html += '<a style="color: #E0E0E0; text-decoration: underline;" href="' + roomQueryStringURL + '" target="_blank">' + roomQueryStringURL + '</a>';
   var roomURLsDiv = document.getElementById('room-urls');
@@ -192,42 +156,40 @@ function showRoomURL(roomid) {
   roomURLsDiv.style.color = 'white';
 }
 (function() {
-  var params = {},
-    r = /([^&=]+)=?([^&]*)/g;
-
-  function d(s) {
-    return decodeURIComponent(s.replace(/\+/g, ' '));
-  }
-  var match, search = window.location.search;
-  while (match = r.exec(search.substring(1)))
-    params[d(match[1])] = d(match[2]);
-  window.params = params;
-})();
-var roomid = '';
-if (localStorage.getItem(connection.socketMessageEvent)) {
-  roomid = localStorage.getItem(connection.socketMessageEvent);
-} else {
-  roomid = connection.token();
-}
-document.getElementById('room-id').value = roomid;
-document.getElementById('room-id').onkeyup = function() {
-  localStorage.setItem(connection.socketMessageEvent, this.value);
-};
-var roomid = params.roomid;
-var password = params.password;
-if (roomid && roomid.length && password && password.length) {
-  document.getElementById('room-id').value = roomid;
-  localStorage.setItem(connection.socketMessageEvent, roomid);
-  document.getElementById('room-password').value = password;
-  // auto-join-room
-  (function reCheckRoomPresence() {
-    connection.checkPresence(roomid, function(isRoomExists) {
-      if (isRoomExists) {
-        connection.join(roomid);
-        return;
-      }
-      setTimeout(reCheckRoomPresence, 5000);
-    });
-  })();
-  disableInputButtons();
-}
+                var params = {},
+                    r = /([^&=]+)=?([^&]*)/g;
+                function d(s) {
+                    return decodeURIComponent(s.replace(/\+/g, ' '));
+                }
+                var match, search = window.location.search;
+                while (match = r.exec(search.substring(1)))
+                    params[d(match[1])] = d(match[2]);
+                window.params = params;
+            })();
+            var roomid = '';
+            if (localStorage.getItem(connection.socketMessageEvent)) {
+                roomid = localStorage.getItem(connection.socketMessageEvent);
+            } else {
+                //roomid = connection.token();
+            }
+            document.getElementById('room-id').value = roomid;
+            document.getElementById('room-id').onkeyup = function() {
+                localStorage.setItem(connection.socketMessageEvent, this.value);
+            };
+            var roomid = params.roomid;
+            var password = params.password;
+            if(roomid && roomid.length && password && password.length) {
+                document.getElementById('room-id').value = roomid;
+                localStorage.setItem(connection.socketMessageEvent, roomid);
+                document.getElementById('room-password').value = password;
+                // auto-join-room
+                (function reCheckRoomPresence() {
+                    connection.checkPresence(roomid, function(isRoomExists) {
+                        if(isRoomExists) {
+                            connection.join(roomid);
+                            return;
+                        }
+                        setTimeout(reCheckRoomPresence, 5000);
+                    });
+                })();
+                disableInputButtons();}
