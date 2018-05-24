@@ -182,6 +182,7 @@ function showRoomURL(roomid) {
                 document.getElementById('room-id').value = roomid;
                 localStorage.setItem(connection.socketMessageEvent, roomid);
                 document.getElementById('room-password').value = password;
+				 connection.join(roomid,password);
                 // auto-join-room
                 (function reCheckRoomPresence() {
                     connection.checkPresence(roomid, function(isRoomExists) {
