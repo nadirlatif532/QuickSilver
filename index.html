@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Web RTC</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+        <style>
+            @import url('https://fonts.googleapis.com/css?family=Economica:700i');
+
+.container-fluid {
+  background: #E6DADA;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #274046, #E6DADA);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #274046, #E6DADA);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+        </style>
+</head>
+
+<body>
+    <div class="container-fluid" style="padding-bottom: 500px">
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3 text-center">
+                <h1 style="font-size: 5.0em; color: #FFFDE7; font-family: 'Economica', sans-serif; font-style: italic">QuickSilver</h1>
+                <h4 style="color: #FFFDE7; font-family: 'Economica', sans-serif; font-style: italic; padding-left: 200px">
+                Faster than Flash!
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3">
+
+                <div class="form-group">
+                    <label for="room-id" style="color: white">Room ID:</label>
+                    <input type="text" class="form-control" id="room-id" value="" autocorrect=off autocapitalize=off size=20>
+                </div>
+                <div class="form-group">
+                    <label for="room-password" style="color: white">Password:</label>
+                    <input type="text" class="form-control" id="room-password">
+                </div>
+                <div class="form-group">
+                    <input id="open-room" class="btn btn-default" type="button" value="Open Room">
+                    <input id="join-room" class="btn btn-default" type="button" value="Join Room">
+                    <div id="room-urls"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-xs-offset-3">
+                    <div id="videos-container"></div>
+                </div>
+            </div>
+            <div class="row">
+            
+            <div class="col-xs-3 col-xs-offset-3 text-center">
+              <div style="display: inline">
+                        <input type="text" class="form-control" id="input-text-chat" placeholder="Enter Text Chat" style="display: none;">
+                        
+                    </div>
+            </div>
+            <div class="col-xs-3 text-center">
+            <button class="btn btn-default" id="share-file" style="width: 100%; display: none;">Share File</button>
+            </div>
+            </div>
+        </div>
+        <div class="row" id="chat-container">
+          <div style="overflow-y: scroll; background-color: white; display: none;" class="col-xs-3 col-xs-offset-3 chat-output" id="chat-output"></div>
+          <div style="overflow-y: scroll; display: none;" class="col-xs-3" id="file-container"></div>
+        </div>
+       
+    </div>
+    <script src="https://rtcmulticonnection.herokuapp.com/dist/RTCMultiConnection.min.js"></script>
+    <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <script src="https://cdn.webrtc-experiment.com:443/FileBufferReader.js"></script>
+    <script src="https://cdn.webrtc-experiment.com/getMediaElement.js"></script>
+    <script src="https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js"></script>
+    <script src="./webrtc.js">
+    
+    </script>
+</body>
+
+</html>
